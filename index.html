@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação com Google Login</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #content {
+            display: none;
+        }
+        .alert {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Votação do Projeto</h2>
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+
+    <div id="content">
+        <h3>Bem-vindo! Você pode votar agora.</h3>
+        <form id="voteForm">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" required>
+            <br><br>
+            <label for="vote">Escolha sua opção:</label>
+            <select id="vote" required>
+                <option value="">Selecione uma opção</option>
+                <option value="opcao1">Opção 1</option>
+                <option value="opcao2">Opção 2</option>
+                <option value="opcao3">Opção 3</option>
+            </select>
+            <br><br>
+            <button type="submit">Votar</button>
+        </form>
+        <div id="alert" class="alert" style="display:none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
