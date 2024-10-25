@@ -1,57 +1,22 @@
-let usersVoted = []; // Array para armazenar os e-mails que já votaram
-
-function onSignIn(googleUser) {
-    const profile = googleUser.getBasicProfile();
-    const email = profile.getEmail();
-
-    // Exibir a seção de votação
-    document.getElementById('content').style.display = 'block';
-    document.getElementById('email').value = email; // Preencher o campo de e-mail com o e-mail do usuário
+// Simulação do envio de e-mail (pode ser implementado com um backend real)
+function sendConfirmationEmail(email) {
+    // Aqui, você poderia usar um serviço de envio de e-mails para enviar um link de confirmação
+    console.log(`Enviando e-mail de confirmação para: ${email}`);
 }
 
-function onFailure(error) {
-    console.log(error);
-}
-
-function renderButton() {
-    gapi.signin2.render('my-signin2', {
-        'scope': 'profile email',
-        'width': 300,
-        'height': 40,
-        'longtitle': true,
-        'theme': 'dark',
-        'onsuccess': onSignIn,
-        'onfailure': onFailure
-    });
-}
-
-// Lógica de votação
-document.getElementById('voteForm').addEventListener('submit', function(event) {
+// Alterar o evento de submissão do formulário para enviar o e-mail
+document.getElementById('emailForm').addEventListener('submit', function(event) {
     event.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const selectedVote = document.getElementById('vote').value;
-    const alertBox = document.getElementById('alert');
-
-    if (usersVoted.includes(email)) {
-        alertBox.textContent = 'Você já votou uma vez com este e-mail!';
-        alertBox.style.display = 'block';
+    const email = document.getElementById('emailInput').value;
+    if (validateEmail(email)) {
+        if (hasVoted(email, selectedProjectId)) {
+            alert("Você já votou nesse projeto.");
+        } else {
+            sendConfirmationEmail(email);  // Enviar e-mail de confirmação
+            alert("Um e-mail de confirmação foi enviado. Por favor, confirme para registrar seu voto.");
+            // Aqui, você não registra o voto até que o usuário confirme através do e-mail
+        }
     } else {
-        usersVoted.push(email); // Adiciona o e-mail à lista de votos
-        alertBox.textContent = 'Obrigado por votar! Sua escolha: ' + selectedVote;
-        alertBox.style.color = 'green';
-        alertBox.style.display = 'block';
-
-        // Aqui você pode adicionar lógica para enviar o voto ao servidor
+        alert("Por favor, insira um e-mail válido.");
     }
 });
-
-function start() {
-    gapi.load('auth2', function() {
-        gapi.auth2.init({
-            client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com'
-        }).then(renderButton);
-    });
-}
-
-<script async defer onload="start()"></script>
