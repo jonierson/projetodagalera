@@ -3,49 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votação com Google Login</title>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
+    <title>Página de Votação</title>
+    <script>
+        // Função para validar o e-mail
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
         }
-        #content {
-            display: none;
+
+        // Simulação do envio de e-mail de confirmação
+        function sendConfirmationEmail(email) {
+            console.log(`Enviando e-mail de confirmação para: ${email}`);
         }
-        .alert {
-            color: red;
-            margin-top: 20px;
+
+        // Simulação da verificação de votos
+        const votes = {};
+
+        function hasVoted(email, projectId) {
+            return votes[email] && votes[email].includes(projectId);
         }
-    </style>
+
+        // Função para lidar com a submissão do formulário
+        function submitVote(event) {
+            event.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const selectedProjectId = document.getElementById('projectSelect').value;
+
+            if (validateEmail(email)) {
+                if (hasVoted(email, selectedProjectId)) {
+                    alert("Você já votou nesse projeto.");
+                } else {
+                    sendConfirmationEmail(email);  // Enviar e-mail de confirmação
+                    alert("Um e-mail de confirmação foi enviado. Por favor, confirme para registrar seu voto.");
+                    // Registrar o voto apenas após a confirmação
+                    if (!votes[email]) {
+                        votes[email] = [];
+                    }
+                    votes[email].push(selectedProjectId);
+                }
+            } else {
+                alert("Por favor, insira um e-mail válido.");
+            }
+        }
+    </script>
 </head>
 <body>
-
-    <h2>Votação do Projeto</h2>
-    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-
-    <div id="content">
-        <h3>Bem-vindo! Você pode votar agora.</h3>
-        <form id="voteForm">
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" required>
-            <br><br>
-            <label for="vote">Escolha sua opção:</label>
-            <select id="vote" required>
-                <option value="">Selecione uma opção</option>
-                <option value="opcao1">Opção 1</option>
-                <option value="opcao2">Opção 2</option>
-                <option value="opcao3">Opção 3</option>
-            </select>
-            <br><br>
-            <button type="submit">Votar</button>
-        </form>
-        <div id="alert" class="alert" style="display:none;"></div>
-    </div>
-
-    <script src="script.js"></script>
-
+    <h1>Votação de Projetos</h1>
+    <form id="emailForm" onsubmit="submitVote(event)">
+        <label for="emailInput">E-mail:</label>
+        <input type="email" id="emailInput" required>
+        <br><br>
+        <label for="projectSelect">Selecione um Projeto:</label>
+        <select id="projectSelect">
+            <option value="projeto1">Projeto 1</option>
+            <option value="projeto2">Projeto 2</option>
+            <option value="projeto3">Projeto 3</option>
+        </select>
+        <br><br>
+        <button type="submit">Votar</button>
+    </form>
 </body>
 </html>
